@@ -10,6 +10,7 @@
 
 # production
 /build
+/_telas
 
 # misc
 .DS_Store
