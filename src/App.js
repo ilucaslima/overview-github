@@ -1,14 +1,16 @@
 import React from 'react';
 
 import GlobalStyle from './styles/global';
-import Search from './pages/search';
+import Rotas from './routes';
+
+import { HashRouter } from 'react-router-dom';
 
 function App() {
   return (
-    <>
+    <HashRouter>
       <GlobalStyle />
-      <Search />
-    </>
+      <Rotas />
+    </HashRouter>
   );
 }
 

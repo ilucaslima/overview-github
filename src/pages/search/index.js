@@ -7,13 +7,26 @@ import { Wrapper, Card, Container, Input, Button,
 import Github from '../../images/Github.png';
 
 export default class search extends React.Component{
+
+    state={
+        user: "",
+    }
+
+  
+
+    
+
     render(){
         return (
             <Wrapper>
                 <Container>
                     <img src={Github} alt="Github" />
                     <Card>
-                        <Input placeholder="Username"/>
+                        <Input
+                        placeholder="Username"
+                        value={this.state.user}
+                        changeUser={this.changeUser}
+                        />
                         <Button type="submit" value="SEND"/>
                     </Card>
                 </Container>
