@@ -1,38 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 
-import { Wrapper, Card, Information, Repository, InformationRepository,
-        Button
-} from './styled';
+import {useParams} from 'react-router-dom';
 
-import Perfil from '../../images/perfil.png';
+import {
+  Wrapper,
+  Card,
+  Information,
+  Repository,
+  InformationRepository,
+  Button,
+} from "./styled";
 
-import IconRepository from '../../images/icon-repository.png';
-import IconLike from '../../images/icon-like.png';
+import Perfil from "../../images/perfil.png";
+import IconRepository from "../../images/icon-repository.png";
+import IconLike from "../../images/icon-like.png";
 
+import api from '../../config/api';
 
-export default class index extends React.Component{
-    render(){
-        return (
-                <Wrapper>
-                    <Card>
-                        <Information>
-                            <img src={Perfil} alt="perfil "/>
-                            <h2>Talon Counter</h2>
-                            <p>Lorem Ipsum is simply dummy text of the
-                                printing and typesetting industry.
-                                Lorem Ipsum has been the industry's
-                                standard dummy text ever since the.</p>
-                            <InformationRepository>
-                                <a><img src={IconRepository} alt="repository"/> 20 Repository</a>
-                                <a><img src={IconLike} alt="Like"/>30 Followers</a>
-                            </InformationRepository>
-                            <Button>Ver Perfil</Button>
-                        </Information>
-                        <Repository>
-                            
-                        </Repository>
-                    </Card>
-                </Wrapper>
-        )
-    }
+export default function View() {
+  const params = useParams();
+  const [data, setData] = useState({});
+  
+  useEffect(() => {
+    const username = params.username;
+    api.get(`/users/${username}`).then(({data}) => {
+      setData(data);
+    }).catch(() => {
+      console.log('error')
+    })
+  },[data, params.username])
+
+  return (
+    <Wrapper>
+      <Card>
+        <Information>
+          <img src={data.avatar_url} alt="perfil " />
+          <h2>{data.name}</h2>
+          <InformationRepository>
+            <a>
+              <img src={IconRepository} alt="repository" /> {data.public_repos} Repository
+            </a>
+            <a>
+              <img src={IconLike} alt="Like" />
+              {data.followers} Followers
+            </a>
+          </InformationRepository>
+          <a href={`https://github.com/${data.login}`} target='_blank'><Button>Ver Perfil</Button></a>
+        </Information>
+        <Repository></Repository>
+      </Card>
+    </Wrapper>
+  );
 }

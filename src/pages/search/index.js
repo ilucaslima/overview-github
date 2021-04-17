@@ -1,36 +1,40 @@
-import React from 'react';
+import React, { useState } from "react";
+import { useHistory } from 'react-router-dom'
 
-import { Wrapper, Card, Container, Input, Button,
+import { Wrapper, Card, Container, Input, Button } from "./styled";
 
-} from './styled';
+import Github from "../../images/Github.png";
 
-import Github from '../../images/Github.png';
+import api from '../../config/api';
 
-export default class search extends React.Component{
+export default function Search() {
+  let history = useHistory();
+  const [username, setUsername] = useState('');
+  const [isError, setIsError] = useState(false);
 
-    state={
-        user: "",
-    }
+  function onSubmit(username){
+    api.get(`/users/${username}`).then(() => {
+      username && history.push(`/view/${username}`)
+    }).catch(() => {
+      setIsError(true);
+      setUsername('');
+    })
+  }
 
-  
-
-    
-
-    render(){
-        return (
-            <Wrapper>
-                <Container>
-                    <img src={Github} alt="Github" />
-                    <Card>
-                        <Input
-                        placeholder="Username"
-                        value={this.state.user}
-                        changeUser={this.changeUser}
-                        />
-                        <Button type="submit" value="SEND"/>
-                    </Card>
-                </Container>
-            </Wrapper>
-        )
-    }
+    return (
+      <Wrapper>
+        <Container>
+          <img src={Github} alt="Github" />
+          <Card>
+            <Input
+              error={isError}
+              placeholder={`${isError ? 'Digite um usuário válido' : 'Digite um usuário'}`}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Button type="submit" value="SEND" onClick={() => onSubmit(username)}/>
+          </Card>
+        </Container>
+      </Wrapper>
+    );
 }
